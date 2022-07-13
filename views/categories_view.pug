@@ -1,0 +1,14 @@
+extends layout 
+ 
+block content 
+    a(href="/categories/add_category") Add a Category.
+
+    h1 Product Categories:
+
+    ul
+        each category in list_categories
+            dt
+                a(href=category.url) #{category.name}
+
+        else 
+            p there are no categories.
