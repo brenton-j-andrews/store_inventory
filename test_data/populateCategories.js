@@ -121,7 +121,7 @@ function createProducts(cb) {
         function(callback) {
             productCreate("Fresh Salmon", "Fresh caught wild salmon from Washington State", categories[2], 10.99, 11, callback);
         },
-    ])
+    ], cb)
 }
 
 async.series([

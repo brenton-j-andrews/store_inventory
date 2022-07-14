@@ -1,8 +1,10 @@
 let async = require('async');
+let mongoose = require('mongoose');
 
 const { body, validationResult } = require('express-validator');
 
 let Category = require('../models/categories');
+let Product = require("../models/product");
 
 
 // Display list of all grocery categories for the main page.
@@ -19,12 +21,37 @@ exports.categories_list = function(req, res, next) {
 }
 
 
-// Display all products in selected category.
+// Display details of selected category.
 exports.category_products = function(req, res, next) {
-    let title = req.params.category;
-    let description = req.params.description;
-    console.log(req.params);
-    res.render('category_products', { title: title + " Products: ", description : description });
+
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        let err = new Error("Invalid ObjectID");
+        err.status = 404;
+        return next(err);
+    }
+
+    async.parallel({
+        category: function(callback) {
+            Category.findById(req.params.id).exec(callback);
+        },
+
+        category_products: function(callback) {
+            Product.find({ 'category' : req.params.id }, 'name description')
+            .exec(callback);
+        }
+
+    }, function(err, results) {
+
+        console.log(results.category_products);
+        if (err) { return next(err); }
+
+        if (results.category == null) {
+            let err = new Error("Category not found");
+            err.status = 404;
+            return next(err);
+        }
+        res.render('category_products', {title : results.category.name + " products:", products: results.category_products})
+    });
 }
 
 

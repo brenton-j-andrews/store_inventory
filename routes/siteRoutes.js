@@ -22,7 +22,7 @@ router.post("/add_category", categories_controller.create_category);
 // PRODUCT ROUTES //
 
 // GET request for all products of selected category.
-router.get("/:category", categories_controller.category_products);
+router.get("/:id", categories_controller.category_products);
 
 
 
