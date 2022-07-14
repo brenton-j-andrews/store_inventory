@@ -9,6 +9,7 @@ block content
         each category in list_categories
             dt
                 a(href=category.url) #{category.name}
+                p=category.description
 
         else 
             p there are no categories.

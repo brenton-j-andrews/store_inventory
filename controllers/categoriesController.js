@@ -8,7 +8,7 @@ let Category = require('../models/categories');
 // Display list of all grocery categories for the main page.
 exports.categories_list = function(req, res, next) {
 
-    Category.find({}, 'name')
+    Category.find({}, 'name description')
     .sort([["name", "ascending"]])
     .exec(function (err, list_categories) {
         if (err) { return next(err); }
@@ -22,7 +22,9 @@ exports.categories_list = function(req, res, next) {
 // Display all products in selected category.
 exports.category_products = function(req, res, next) {
     let title = req.params.category;
-    res.render('category_products', { title: title + " Products: "});
+    let description = req.params.description;
+    console.log(req.params);
+    res.render('category_products', { title: title + " Products: ", description : description });
 }
 
 

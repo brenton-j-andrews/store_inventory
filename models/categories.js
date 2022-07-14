@@ -1,4 +1,3 @@
-// Single product model.
 
 let mongoose = require('mongoose');
 

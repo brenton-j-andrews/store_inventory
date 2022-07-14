@@ -14,7 +14,9 @@ if (!userArgs[0].startsWith('mongodb')) {
 */
 
 var async = require('async')
+
 var Category = require('../models/categories')
+var Product =  require('../models/product');
 
 
 var mongoose = require('mongoose');
@@ -24,12 +26,12 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-var categoriesdas = []
+var categories = [];
+var products = [];
 
 function categoryCreate(name, description, cb) {
     
     let category = new Category({name: name, description: description});
-    console.log(category);
 
     category.save(function(err) {
         if (err) {
@@ -37,11 +39,33 @@ function categoryCreate(name, description, cb) {
             return;
         }
 
-        categoriesdas.push(category);
+        console.log("New Category: " + category);
+        categories.push(category);
         cb(null, category);
     })
 }
 
+function productCreate(name, description, category, price, inventory, cb) {
+    
+    let product = new Product({
+        name: name, 
+        description: description,
+        category: category,
+        price: price,
+        inventory: inventory
+    });
+
+    product.save(function(err) {
+        if (err) {
+            cb(err, null);
+            return;
+        }
+
+        console.log("New product: " + product);
+        products.push(product);
+        cb(null, product);
+    }) 
+}
 
 function createCategories(cb) {
     async.series([
@@ -55,13 +79,54 @@ function createCategories(cb) {
 
         function(callback) {
             categoryCreate('Meat', 'Beef, Pork, Seafood and other animal products', callback);
-        }
+        }],
+        cb);
+}
+
+function createProducts(cb) {
+    console.log("am i here?");
+    async.series([
+        function(callback) {
+            productCreate("Milk", "Fresh whole milk!", categories[0], 3.99, 43, callback);
+        },
+
+        function(callback) {
+            productCreate("Ice Cream", "Delicious vanilla icecream", categories[0], 5.50, 12, callback);
+        },
+
+        function(callback) {
+            productCreate("Greek Yogurt", "Organic Greek Yogurt", categories[0], 2.99, 21, callback);
+        },
+
+        function(callback) {
+            productCreate("Honeycrisp Apples", "Organic Honeycrisp Apples", categories[1], 3.49, 71, callback);
+        },
+
+        function(callback) {
+            productCreate("Bananas", "Ripe banana's!", categories[1], 1.99, 32, callback);
+        },
+
+        function(callback) {
+            productCreate("Italian Parsley", "A bundle of fresh Italian Parsley", categories[1], .99, 20, callback);
+        },
+
+        function(callback) {
+            productCreate("Ground Beef", "Perfect for hamburgers!", categories[2], 6.99, 17, callback);
+        },
+
+        function(callback) {
+            productCreate("Breakfast Sausage", "Breakfast sausage made with our famous spice blend", categories[2], 5.49, 19, callback);
+        },
+
+        function(callback) {
+            productCreate("Fresh Salmon", "Fresh caught wild salmon from Washington State", categories[2], 10.99, 11, callback);
+        },
     ])
 }
 
-
 async.series([
-    createCategories
+    createCategories,
+    createProducts
 ],
 
 // Optional callback
@@ -73,7 +138,7 @@ function(err, results) {
         console.log('BOOKInstances: '+bookinstances);
         
     }
-    console.log("hmm.");
+
     // All done, disconnect from database
     mongoose.connection.close();
 });

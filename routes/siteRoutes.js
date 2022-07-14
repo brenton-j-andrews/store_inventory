@@ -19,7 +19,9 @@ router.post("/add_category", categories_controller.create_category);
 
 
 
-// Product Routes //
+// PRODUCT ROUTES //
+
+// GET request for all products of selected category.
 router.get("/:category", categories_controller.category_products);
 
 
