@@ -1,0 +1,32 @@
+extends layout 
+ 
+block content 
+    a(href="/") Return Home
+    h1 Add a new product:
+
+    form(method='POST' action='')
+        div.form-group
+            label(for='name') Product Name:
+                input#name.form-control(type='text', name='name' value='')
+            
+        div.form-group
+            label(for='description') Product Description: 
+                input#description.form-control(type='textarea', name='description' value='')
+
+        div.form-group
+            label(for='price') Product Price: 
+                input#price.form-control(type='number', name='price' value='')
+
+        div.form-group
+            label(for='count') Product Count: 
+                input#count.form-control(type='number', name='count' value='')
+            
+        div.form-group
+            button.btn.btn-primary(type='submit') Submit
+
+    if errors 
+        ul 
+            for error in errors 
+                li!=error.msg
+    else 
+        p no errors

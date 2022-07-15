@@ -3,6 +3,8 @@ extends layout
 block content 
     a(href="/") Return Home
     br
+    a(href= id + "/add") Add new product
+    br
     
     h1=title
 
@@ -11,4 +13,10 @@ block content
 
             dt 
                 p=product.name
+                p=product.description
+                p=product.price 
+                p=product.inventory
+                p=id
+
+                br
 

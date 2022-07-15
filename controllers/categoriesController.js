@@ -36,13 +36,14 @@ exports.category_products = function(req, res, next) {
         },
 
         category_products: function(callback) {
-            Product.find({ 'category' : req.params.id }, 'name description')
+            console.log(req.params.id);
+            Product.find({ 'category' : req.params.id }, 'name description price inventory')
             .exec(callback);
         }
 
     }, function(err, results) {
 
-        console.log(results.category_products);
+        console.log(req.params.id);
         if (err) { return next(err); }
 
         if (results.category == null) {
@@ -50,7 +51,7 @@ exports.category_products = function(req, res, next) {
             err.status = 404;
             return next(err);
         }
-        res.render('category_products', {title : results.category.name + " products:", products: results.category_products})
+        res.render('category_products', {title : results.category.name + " products:", id: req.params.id, products: results.category_products})
     });
 }
 
@@ -59,6 +60,7 @@ exports.category_products = function(req, res, next) {
 exports.add_category = function(req, res, next) {
     res.render('add_category');
 }
+
 
 // Handle category creation on POST from form.
 exports.create_category = [

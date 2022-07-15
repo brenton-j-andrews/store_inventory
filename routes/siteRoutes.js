@@ -5,6 +5,7 @@ let router = express.Router();
 
 // Controller modules.
 let categories_controller = require('../controllers/categoriesController');
+let products_controller = require('../controllers/productsController');
 
 // CATEGORY ROUTES //
 
@@ -24,6 +25,10 @@ router.post("/add_category", categories_controller.create_category);
 // GET request for all products of selected category.
 router.get("/:id", categories_controller.category_products);
 
+// GET request for creating new product under selected category.
+router.get("/:id/add", products_controller.add_product);
 
+// POST request for submitting new product form.
+router.post("/:id/add", products_controller.create_product);
 
 module.exports = router;
