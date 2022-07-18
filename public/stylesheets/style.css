@@ -6,7 +6,7 @@
 
 
 /* Page styling */
-html {
+html, body {
   height: 100%;
 }
 
@@ -23,7 +23,7 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 90%;
+  height: 100%;
 }
 
 /* Header Styling */
@@ -104,4 +104,17 @@ a {
 
 .products-table th {
   color: red;
+}
+
+/* Footer styling */
+
+.page-footer {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+
+  bottom: 0;
+  width: 90%;
+  background-color: orange;
+  flex-shrink: 0;
 }
