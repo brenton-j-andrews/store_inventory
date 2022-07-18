@@ -1,9 +1,107 @@
+/* Import fonts / declare constants */
+@font-face {
+  font-family: headerFont;
+  src: url("../fonts/Teko-Regular.ttf");
+}
+
+
+/* Page styling */
+html {
+  height: 100%;
+}
+
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: yellow;
 }
 
 a {
   color: #00B7FF;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 90%;
+}
+
+/* Header Styling */
+
+.page-header {
+  font-family: headerFont;
+  font-size: 24px;
+  width: 90%;
+  border-bottom: 3px solid black;
+  margin-bottom: 25px;
+  padding: 0px 25px 0px 25px;
+}
+
+.page-header h1 {
+  padding: 0px;
+  margin: 5px 0px 5px 0px;
+}
+
+.categories-nav {
+  width: 90%;
+  background-color: orange;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 25px 10px 25px;
+}
+
+.btn-wrapper {
+  margin: 0px 15px 0px 15px;
+  height: 50px;
+  height: 50px;
+  position: relative;
+  display: inline-block;
+}
+
+.img-btn {
+  height: 50px;
+  height: 50px;
+}
+
+/* Button hover and tooltip styling. */
+
+.tooltiptext {
+  visibility: hidden;
+  width: 60px;
+
+  background-color: black;
+  color: white;
+
+  border-radius: 6px;
+  padding: 5px 5px;
+  
+  position: absolute;
+  z-index: 1;
+
+  top: -5px;
+  right: 125%;
+
+  opacity: 0;
+  transition: opacity 2s;
+}
+
+.btn-wrapper:hover .tooltiptext {
+  transform: scale(1.1);
+  visibility: visible;
+  opacity: 1;
+} 
+
+
+
+
+
+/* Stuff... */
+
+.products-table {
+  text-align: center;
+}
+
+.products-table th {
+  color: red;
 }

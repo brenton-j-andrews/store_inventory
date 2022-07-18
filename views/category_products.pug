@@ -8,15 +8,17 @@ block content
     
     h1=title
 
-    ul
+
+    table(class="products-table" style='width:80%')
+        tr(class="products-table-fields")
+
+            th Product Name
+            th Product Stock 
+            th Unit Price (USD)
+        
         each product in products
 
-            dt 
-                p=product.name
-                p=product.description
-                p=product.price 
-                p=product.inventory
-                p=id
-
-                br
-
+            tr
+                td=product.name
+                td=product.inventory
+                td="$" + product.price 

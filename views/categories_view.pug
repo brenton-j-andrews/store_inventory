@@ -1,9 +1,22 @@
 extends layout 
  
 block content 
-    a(href="/categories/add_category") Add a Category.
 
-    h1 Product Categories:
+    div(class="categories-nav")
+        h1 Product Categories:
+
+        div(class="category-crud-btns")
+            a(href="/categories/add_category" class="btn-wrapper")
+                img(src="/images/add.png"  alt="update" class="img-btn")
+                span(class="tooltiptext") Add a new category.
+            
+            a(href="/categories/add_category" class="btn-wrapper")
+                img(src="/images/update.png"  alt="update" class="img-btn")
+                span(class="tooltiptext") Edit a category.
+
+            a(href="/categories/add_category" class="btn-wrapper")
+                img(src="/images/delete.png"  alt="update" class="img-btn")
+                span(class="tooltiptext") Delete a category.
 
     ul
         each category in list_categories
