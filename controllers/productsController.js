@@ -9,7 +9,19 @@ let Product = require("../models/product");
 
 // Display product create form on GET.
 exports.add_product = function(req, res, next) {
-    res.render('add_product');
+    Category.findById(req.params.id)
+    .populate("name")
+    .exec(function (err, result) {
+        if (err) { next(err) };
+        
+        if (result == null) {
+            let err = new Error("Category not found, check database.");
+            err.statusCode = 404;
+            return next(err);
+        }
+
+        res.render("add_product", {title: "Add product to " + result.name + " category."});
+    })
 }
 
 // Handle product creation on POST from form.
