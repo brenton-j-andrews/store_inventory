@@ -16,7 +16,7 @@ let ProductSchema = new Schema(
 ProductSchema
 .virtual('url')
 .get(function() {
-    return "/product/" + this.ObjectId;
+    return "/product/" + this._id;
 });
 
 // Export model.

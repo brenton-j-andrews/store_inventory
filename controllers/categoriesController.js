@@ -51,6 +51,7 @@ exports.category_products = function(req, res, next) {
             err.status = 404;
             return next(err);
         }
+
         res.render('category_products', {title : results.category.name + " products:", id: req.params.id, products: results.category_products})
     });
 }
@@ -94,3 +95,9 @@ exports.create_category = [
         })
     }
 ]
+
+
+// Display category deletion page on GET.
+exports.delete_category = function(req, res, next) {
+    res.send("this is the delete page!");
+}

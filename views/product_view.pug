@@ -1,0 +1,27 @@
+extends layout 
+ 
+block content 
+
+    br
+    a(href="/") Return Home
+    br
+    a(href=product_info.category.url) Return to #{product_info.category.name} Page.
+
+    div(class="categories-nav")
+        h1=title
+
+        div(class="category-crud-btns")
+           
+            a(href="/categories/edit_category" class="btn-wrapper")
+                img(src="/images/update.png"  alt="update" class="img-btn")
+                span(class="tooltiptext") Edit this product.
+
+            a(href="/categories/delete_category" class="btn-wrapper")
+                img(src="/images/delete.png"  alt="delete" class="img-btn")
+                span(class="tooltiptext") Delete this product.
+
+    div(class="product-details")
+        p Description: #{product_info.description}.
+        p Currently in stock: #{product_info.inventory}.
+        p Current price: #{product_info.price}.
+        p Category: #{product_info.category.name}.

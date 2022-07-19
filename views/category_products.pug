@@ -1,12 +1,26 @@
 extends layout 
  
 block content 
+
+    br
     a(href="/") Return Home
     br
-    a(href= id + "/add") Add new product
-    br
-    
-    h1=title
+
+    div(class="categories-nav")
+        h1=title
+
+        div(class="category-crud-btns")
+            a(href= id + "/add" class="btn-wrapper")
+                img(src="/images/add.png"  alt="update" class="img-btn")
+                span(class="tooltiptext") Add a new product.
+            
+            a(href="/categories/edit_category" class="btn-wrapper")
+                img(src="/images/update.png"  alt="update" class="img-btn")
+                span(class="tooltiptext") Edit this category.
+
+            a(href="/categories/delete_category" class="btn-wrapper")
+                img(src="/images/delete.png"  alt="delete" class="img-btn")
+                span(class="tooltiptext") Delete this category.
 
 
     table(class="products-table" style='width:80%')
@@ -15,6 +29,7 @@ block content
             th Product Name
             th Product Stock 
             th Unit Price (USD)
+            th Product Link
         
         each product in products
 
@@ -22,3 +37,6 @@ block content
                 td=product.name
                 td=product.inventory
                 td="$" + product.price 
+
+                td 
+                    a(href="/categories" + product.url) View Product
