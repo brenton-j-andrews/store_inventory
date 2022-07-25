@@ -43,7 +43,7 @@ exports.category_products = function(req, res, next) {
 
     }, function(err, results) {
 
-        console.log(req.params.id);
+        console.log(results.category);
         if (err) { return next(err); }
 
         if (results.category == null) {
@@ -52,7 +52,11 @@ exports.category_products = function(req, res, next) {
             return next(err);
         }
 
-        res.render('category_products', {title : results.category.name + " products:", id: req.params.id, products: results.category_products})
+        res.render('category_products', {
+            title : results.category.name + " products:",
+            description: results.category.description, 
+            id: req.params.id, products: results.category_products
+        })
     });
 }
 

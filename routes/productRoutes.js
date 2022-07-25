@@ -19,9 +19,15 @@ router.get("/:id/add", products_controller.add_product);
 router.post("/:id/add", products_controller.create_product);
 
 // GET request for deleting selected product.
-router.get("/:id/delete", products_controller.delete_product);
+router.get("/:id/delete", products_controller.delete_product_get);
 
 // POST request for deleting selected product.
-router.post("/:id/delete", products_controller.delete_selected);
+router.post("/:id/delete", products_controller.delete_product_post);
+
+// GET request for updating selected product.
+router.get("/:id/update", products_controller.update_product_get);
+
+// POST request for updating selected product.
+router.post("/:id/update", products_controller.update_product_post);
 
 module.exports = router;

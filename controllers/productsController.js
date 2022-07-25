@@ -86,7 +86,7 @@ exports.create_product = [
 ]
 
 // Display delete product form on GET.
-exports.delete_product = function(req, res, next) {
+exports.delete_product_get = function(req, res, next) {
     
     Product.findById(req.params.id)
     .populate("category")
@@ -108,15 +108,63 @@ exports.delete_product = function(req, res, next) {
 }
 
 // Handle product deletion on POST from delete_product view.
-exports.delete_selected = function(req, res, next) {
-    console.log("test  " + req.params.id);
-    
+exports.delete_product_post = function(req, res, next) {
+
     Product.deleteOne( { _id: req.params.id }, 
     function(err, res) {
         if (err) return err;    
-        else {
-            console.log(res);
-        }
     });
     res.redirect("/");
 }
+
+exports.update_product_get = function(req, res, next) {
+    Product.findById(req.params.id)
+    .populate('category')
+    .exec(function(err, result) {
+        if (err) { next(err); }
+        console.log(result);
+        res.render("update_product", {form_information: result} )
+    })
+}
+
+exports.update_product_post = [
+    body('name').trim().isLength({ min: 1}).escape().withMessage("Category name is required.")
+    .isAlphanumeric('en-US', {ignore: " "}).withMessage('Category name has non-alphanumeric characters.'),
+
+    body('description').trim().isLength({ min: 1 }).escape().withMessage('Category description must be specified.')
+    .isAlphanumeric('en-US', {ignore: " "}).withMessage('Category description has non-alphanumeric characters.'),
+
+    (req, res, next) => {
+
+
+        let newProduct = new Product({
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            inventory: req.body.count
+        })
+        console.log(newProduct);
+        console.log(req.params.id);
+
+        Product.findByIdAndUpdate(
+            req.params.id, 
+
+            {
+            "name": req.body.name,
+            "description": req.body.description,
+            "price" : req.body.price,
+            "inventory": req.body.inventory
+            },
+            
+            function(err, result) {
+                if (err) {
+                    console.log("Error: " + err);
+                } else {
+                    console.log("Document updated.");
+                }
+            })
+
+        res.redirect("/");
+    }
+
+]
