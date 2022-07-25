@@ -1,7 +1,10 @@
 extends layout 
  
 block content 
+
     a(href="/") Return Home
+    a(href=url) Return to #{category_name} page
+
     h1=title
 
     form(method='POST' action='')

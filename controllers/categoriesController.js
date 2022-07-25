@@ -99,5 +99,5 @@ exports.create_category = [
 
 // Display category deletion page on GET.
 exports.delete_category = function(req, res, next) {
-    res.send("this is the delete page!");
+    res.render('delete_product');
 }

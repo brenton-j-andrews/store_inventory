@@ -2,5 +2,9 @@ extends layout
  
 block content 
     a(href="/") Return Home
+    a(href="/product/" + url ) Return to product page.
+
     h1= title 
     
+    form(action="", method="post") 
+        button(type="submit" class="submit-btn") Delete Product.

@@ -9,8 +9,8 @@ block content
     div(class="categories-nav")
         h1=title
 
-        div(class="category-crud-btns")
-            a(href= id + "/add" class="btn-wrapper")
+        div(class="/category-crud-btns")
+            a(href= "/product/" + id + "/add" class="btn-wrapper")
                 img(src="/images/add.png"  alt="update" class="img-btn")
                 span(class="tooltiptext") Add a new product.
             
@@ -39,4 +39,4 @@ block content
                 td="$" + product.price 
 
                 td 
-                    a(href="/categories" + product.url) View Product
+                    a(href= product.url) View Product
