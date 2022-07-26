@@ -31,39 +31,64 @@ exports.display_product = function(req, res, next) {
 // Display product create form on GET.
 exports.add_product = function(req, res, next) {
 
-    Category.findById(req.params.id)
-    .populate("name")
-    .exec(function (err, result) {
-        if (err) { next(err) };
-        
-        if (result == null) {
-            let err = new Error("Category not found, check database.");
-            err.statusCode = 404;
-            return next(err);
+    async.parallel(
+        {
+            category : function(callback) {
+                Category.findById(req.params.id)
+                .populate("name")
+                .exec(callback);
+            },
+            categories_list: function(callback) {
+                Category.find().exec(callback);
+            },
+        },
+
+        function (err, result) {
+            console.log(result.categories_list);
+            if (err) { next(err); }
+            
+            if (result == null) {
+                let err = new Error("Category not found, check that it hasn't been edited or deleted.");
+                err.statusCode = 404;
+                return next(err);
+            }
+
+
+            res.render("add_product", {
+                title: "Add product to " + result.category.name + " category, or choose a difference category below:",
+                url: result.category.url,
+                category_name : result.category.name,
+                categories_list : result.categories_list
+            });
         }
-        console.log(result.name);
-        res.render("add_product", {title: "Add product to " + result.name + " category.", url: result.url, category_name : result.name });
-    })
+    )
 }
 
 // Handle product creation on POST from form.
 exports.create_product = [
 
-    body('name').trim().isLength({ min: 1}).escape().withMessage("Category name is required.")
-        .isAlphanumeric('en-US', {ignore: " "}).withMessage('Category name has non-alphanumeric characters.'),
+    body('name', 'Product name must be at least 3 characters in length.')
+    .trim()
+    .isLength({ min: 3})
+    .escape(),
 
-    body('description').trim().isLength({ min: 1 }).escape().withMessage('Category description must be specified.')
-        .isAlphanumeric('en-US', {ignore: " "}).withMessage('Category description has non-alphanumeric characters.'),
+    body('description', 'There must be a description')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+
+    body('price', "Price must be between $0 and $9999")
+    .isFloat({ force_decimal: true, min: 0, max: 9999 }),
 
 
     // Process request after data validation.
     (req, res, next) => {
 
+        console.log(req.body);
         // Extract all validation errors for display.
         const errors = validationResult(req);
-
+        console.log(req.body);
         if (!errors.isEmpty()) {
-            console.log("you have errors dude!");
             res.render('add_product', {errors : errors.array()} );
             return;
         }
@@ -71,7 +96,7 @@ exports.create_product = [
         let product = new Product({
             name : req.body.name,
             description : req.body.description,
-            category: req.params.id,
+            category: req.body.category,
             price: req.body.price,
             inventory: req.body.count
         });
@@ -117,6 +142,7 @@ exports.delete_product_post = function(req, res, next) {
     res.redirect("/");
 }
 
+// Display product update form on GET.
 exports.update_product_get = function(req, res, next) {
     Product.findById(req.params.id)
     .populate('category')
@@ -127,6 +153,7 @@ exports.update_product_get = function(req, res, next) {
     })
 }
 
+// Handle product update on POST from update_product view.
 exports.update_product_post = [
     body('name').trim().isLength({ min: 1}).escape().withMessage("Category name is required.")
     .isAlphanumeric('en-US', {ignore: " "}).withMessage('Category name has non-alphanumeric characters.'),
@@ -136,15 +163,6 @@ exports.update_product_post = [
 
     (req, res, next) => {
 
-
-        let newProduct = new Product({
-            name: req.body.name,
-            description: req.body.description,
-            price: req.body.price,
-            inventory: req.body.count
-        })
-        console.log(newProduct);
-        console.log(req.params.id);
 
         Product.findByIdAndUpdate(
             req.params.id, 
