@@ -44,7 +44,6 @@ exports.add_product = function(req, res, next) {
         },
 
         function (err, result) {
-            console.log(result.categories_list);
             if (err) { next(err); }
             
             if (result == null) {
@@ -84,14 +83,8 @@ exports.create_product = [
     // Process request after data validation.
     (req, res, next) => {
 
-        console.log(req.body);
         // Extract all validation errors for display.
         const errors = validationResult(req);
-        console.log(req.body);
-        if (!errors.isEmpty()) {
-            res.render('add_product', {errors : errors.array()} );
-            return;
-        }
 
         let product = new Product({
             name : req.body.name,
@@ -101,13 +94,43 @@ exports.create_product = [
             inventory: req.body.count
         });
 
-        console.log(product);
-
-        product.save(function(err) {
-            if (err) { return next(err); }
-            res.redirect("/category/" + req.params.id);
-        })
-    }
+        // If errors are present, re-render 'add_product' as done in add_products function above.
+        if (!errors.isEmpty()) {
+            console.log(req.body);
+            async.parallel(
+                {
+                    category : function(callback) {
+                        Category.findById(req.params.id)
+                        .populate("name")
+                        .exec(callback);
+                    },
+                    categories_list: function(callback) {
+                        Category.find().exec(callback);
+                    },
+                },
+        
+                function (err, result) {
+                    if (err) { next(err); }
+                    
+                    res.render("add_product", {
+                        title: "Add product to " + result.category.name + " category, or choose a difference category below:",
+                        url: result.category.url,
+                        category_name : result.category.name,
+                        categories_list : result.categories_list,
+                        persistant_data : req.body,
+                        errors : errors.array()
+                    });
+                })
+            return;
+        } 
+        
+        else {
+            product.save(function(err) {
+                if (err) return next(err);
+                res.redirect("/category/" + req.params.id);
+            });
+        }
+    },
 ]
 
 // Display delete product form on GET.

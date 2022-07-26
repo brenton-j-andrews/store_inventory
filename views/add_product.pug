@@ -11,25 +11,25 @@ block content
     form(method='POST' action='')
         div.form-group
             label(for='name') Product Name:
-                input#name.form-control(type='text', name='name' value='')
+                input#name.form-control(type='text', name='name' value=persistant_data ? persistant_data.name : '')
             
         div.form-group
             label(for='description') Product Description: 
-                input#description.form-control(type='textarea', name='description' value='')
+                input#description.form-control(type='textarea', name='description' value=persistant_data ? persistant_data.description : '')
 
         div.form-group
             label(for='price') Product Price: 
-                input#price.form-control(type='float', name='price' value='')
+                input#price.form-control(type='float', name='price' value=persistant_data ? persistant_data.price : '')
 
         div.form-group
             label(for='count') Product Count: 
-                input#count.form-control(type='number', name='count' value='')
+                input#count.form-control(type='number', name='count' value=persistant_data ? persistant_data.count : '')
 
         div.form-group
             label(for='category') Choose a category.
             select(id='category' name='category')
                 for item in categories_list 
-                    if item.name === category_name
+                    if item.name == category_name
                         option(value=item._id selected=true)=item.name 
                     else 
                         option(value=item._id)=item.name
