@@ -6,7 +6,6 @@ const { body, validationResult } = require('express-validator');
 let Category = require('../models/categories');
 let Product = require("../models/product");
 
-
 // Display list of all grocery categories for the main page.
 exports.categories_list = function(req, res, next) {
 
@@ -19,7 +18,6 @@ exports.categories_list = function(req, res, next) {
         res.render('categories_view', { list_categories : list_categories});
     })
 }
-
 
 // Display details of selected category.
 exports.category_products = function(req, res, next) {
@@ -58,12 +56,10 @@ exports.category_products = function(req, res, next) {
     });
 }
 
-
 // Display category create form on GET.
 exports.add_category_get = function(req, res, next) {
     res.render('add_category');
 }
-
 
 // Handle category creation on POST from form.
 exports.add_category_post = [
@@ -106,7 +102,6 @@ exports.add_category_post = [
     }
 ]
 
-
 // Display category deletion page on GET.
 exports.delete_category_get = function(req, res, next) {
 
@@ -119,8 +114,8 @@ exports.delete_category_get = function(req, res, next) {
         products : function(callback) {
             Product.find({ 'category' : req.params.id }, 'name')
             .exec(callback);
-        
         }
+
     },  function(err, result) {
 
         console.log(result.category.name);
@@ -161,3 +156,79 @@ exports.delete_category_post = function(req, res, next) {
         res.redirect("/");
     })
 }
+
+// Display category update / edit form on GET.
+exports.update_category_get = function(req, res, next) {
+
+    Category.findById(req.params.id)
+    .exec( 
+        function(err, results) {
+            if (err) { return next(err); }
+
+            // Successful, render.
+            res.render('update_category', {
+                category_name : results.name,
+                category_description : results.description,
+                return_url : results.url
+            });
+        }
+    )
+}
+
+exports.update_category_post = [
+
+    body('name', 'Product name must be at least 3 characters in length.')
+    .trim()
+    .isLength({ min: 3})
+    .escape(),
+
+    body('description', 'There must be a description')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+
+    (req, res, next) => {
+
+        const errors = validationResult(req);
+
+        async.parallel({
+            category : function(callback) {
+                Category.findById(req.params.id)
+                .exec(callback);
+            }
+        },
+        
+        function(err, results) {
+            console.log(results);
+            if (err) { next(err); }
+
+            // If there are errors present, re-render update_category with errors listed and persistant data.
+            if(!errors.isEmpty()) {
+                res.render('update_category', {
+                    category_name : results.name,
+                    category_description : results.description,
+                    return_url : results.url,
+                    persistant_data : req.body,
+                    errors : errors.array()
+                })
+            }
+
+            // If no errors, update the category and associated products!
+            else {
+                console.log(req.body.name);
+                Category.findByIdAndUpdate(req.params.id, 
+                    {
+                        'name' : req.body.name,
+                        'description' : req.body.description
+                    },
+
+                    function(err, result) {
+                        console.log("Document updated.");
+                        res.redirect(result.url);
+                        
+                    }
+                );
+            };
+        });
+    }
+]

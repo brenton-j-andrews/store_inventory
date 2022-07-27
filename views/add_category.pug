@@ -2,6 +2,10 @@ extends layout
  
 block content 
     a(href="/") Return Home
+
+    if(update_bool) 
+        a(href="/") Retunr to category page.
+
     h1 Create a new category!
 
     form(method='POST' action='')
