@@ -82,13 +82,17 @@ exports.add_category_post = [
     // Process request after data validation.
     (req, res, next) => {
 
-        console.log(req);
+        let persistant_data = req.body;
+        console.log(persistant_data);
         // Extract all validation errors for display.
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            console.log("you have errors dude!");
-            res.render('add_category', {errors : errors.array()} );
+            res.render('add_category',
+            {
+                persistant_data : persistant_data,
+                errors : errors.array()
+            });
             return;
         }
 

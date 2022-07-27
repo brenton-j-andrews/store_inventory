@@ -7,11 +7,11 @@ block content
     form(method='POST' action='')
         div.form-group
             label(for='name') Category Name:
-                input#name.form-control(type='text', name='name' value=(undefined===genre ? '' : genre.name))
+                input#name.form-control(type='text', name='name' value=persistant_data ? persistant_data.name : '')
             
         div.form-group
             label(for='description') Category Description: 
-                input#description.form-control(type='textarea', name='description' value='')
+                input#description.form-control(type='textarea', name='description' value=persistant_data ? persistant_data.description : '')
             
         div.form-group
             button.btn.btn-primary(type='submit') Submit
@@ -20,5 +20,3 @@ block content
         ul 
             for error in errors 
                 li!=error.msg
-    else 
-        p no errors
