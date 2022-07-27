@@ -5,6 +5,7 @@ const { body, validationResult } = require('express-validator');
 
 let Category = require('../models/categories');
 let Product = require("../models/product");
+const product = require('../models/product');
 
 
 // Display unique product page on GET.
@@ -105,7 +106,7 @@ exports.create_product = [
                         .exec(callback);
                     },
                     categories_list: function(callback) {
-                        Category.find().exec(callback);
+                        Category.find().exec(callback);f
                     },
                 },
         
@@ -167,13 +168,39 @@ exports.delete_product_post = function(req, res, next) {
 
 // Display product update form on GET.
 exports.update_product_get = function(req, res, next) {
-    Product.findById(req.params.id)
-    .populate('category')
-    .exec(function(err, result) {
-        if (err) { next(err); }
-        console.log(result);
-        res.render("update_product", {form_information: result} )
-    })
+    async.parallel(
+
+        {
+            product: function(callback) {
+                Product.findById(req.params.id)
+                .populate('category')
+                .exec(callback);
+            },
+
+            categories_list: function(callback) {
+                Category.find()
+                .exec(callback);
+            },
+        },
+
+        function (err, result) {
+            console.log(result);
+            if (err) { next(err); }
+            
+            if (result == null) {
+                let err = new Error("Category not found, check that it hasn't been edited or deleted.");
+                err.statusCode = 404;
+                return next(err);
+            }
+
+            res.render("add_product", {
+                title: "Update Product Information: " + result.product.name,
+                url: result.product.category.url,
+                category_name : result.product.category.name,
+                categories_list : result.categories_list
+            });
+        }
+    )
 }
 
 // Handle product update on POST from update_product view.
