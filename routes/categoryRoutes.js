@@ -12,10 +12,10 @@ let products_controller = require('../controllers/productsController');
 router.get("/", categories_controller.categories_list);
 
 // GET request for creating a new category.
-router.get("/add_category", categories_controller.add_category);
+router.get("/add_category", categories_controller.add_category_get);
 
 // POST request for submitting new category form.
-router.post("/add_category", categories_controller.create_category);
+router.post("/add_category", categories_controller.add_category_post);
 
 // GET request for deleting a category.
 router.get("/delete_category", categories_controller.delete_category);

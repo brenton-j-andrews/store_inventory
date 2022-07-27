@@ -62,23 +62,27 @@ exports.category_products = function(req, res, next) {
 
 
 // Display category create form on GET.
-exports.add_category = function(req, res, next) {
+exports.add_category_get = function(req, res, next) {
     res.render('add_category');
 }
 
 
 // Handle category creation on POST from form.
-exports.create_category = [
+exports.add_category_post = [
 
-    body('name').trim().isLength({ min: 1}).escape().withMessage("Category name is required.")
-        .isAlphanumeric('en-US', {ignore: " "}).withMessage('Category name has non-alphanumeric characters.'),
+    body('name', "Category name is required.")
+    .trim()
+    .isLength({ min: 1}).escape(),
 
-    body('description').trim().isLength({ min: 1 }).escape().withMessage('Category description must be specified.')
-        .isAlphanumeric('en-US', {ignore: " "}).withMessage('Category description has non-alphanumeric characters.'),
+    body('description', "Category description is required.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
 
     // Process request after data validation.
     (req, res, next) => {
 
+        console.log(req);
         // Extract all validation errors for display.
         const errors = validationResult(req);
 
