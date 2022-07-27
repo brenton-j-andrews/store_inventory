@@ -13,10 +13,10 @@ let products_controller = require('../controllers/productsController');
 router.get("/:id", products_controller.display_product);
 
 // GET request for creating new product under selected category.
-router.get("/:id/add", products_controller.add_product);
+router.get("/:id/add", products_controller.add_product_get);
 
 // POST request for submitting new product form.
-router.post("/:id/add", products_controller.create_product);
+router.post("/:id/add", products_controller.add_product_post);
 
 // GET request for deleting selected product.
 router.get("/:id/delete", products_controller.delete_product_get);

@@ -3,7 +3,13 @@ extends layout
 block content 
 
     a(href="/") Return Home
-    a(href=url) Return to #{category_name} page
+
+    if update_bool 
+        a(href=`/product/${product._id}`) Return to product page.
+
+    else 
+        a(href=url) Return to #{category_name} page.
+
 
     h1=title
 
@@ -22,8 +28,8 @@ block content
                 input#price.form-control(type='float', name='price' value=persistant_data ? persistant_data.price : '')
 
         div.form-group
-            label(for='count') Product Count: 
-                input#count.form-control(type='number', name='count' value=persistant_data ? persistant_data.count : '')
+            label(for='inventory') Product Count: 
+                input#inventory.form-control(type='number', name='inventory' value=persistant_data ? persistant_data.inventory : '')
 
         div.form-group
             label(for='category') Choose a category.

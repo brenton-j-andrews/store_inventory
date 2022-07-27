@@ -30,7 +30,7 @@ exports.display_product = function(req, res, next) {
 }
 
 // Display product create form on GET.
-exports.add_product = function(req, res, next) {
+exports.add_product_get = function(req, res, next) {
 
     async.parallel(
         {
@@ -55,6 +55,7 @@ exports.add_product = function(req, res, next) {
 
 
             res.render("add_product", {
+                update_bool : false,
                 title: "Add product to " + result.category.name + " category, or choose a difference category below:",
                 url: result.category.url,
                 category_name : result.category.name,
@@ -65,7 +66,7 @@ exports.add_product = function(req, res, next) {
 }
 
 // Handle product creation on POST from form.
-exports.create_product = [
+exports.add_product_post = [
 
     body('name', 'Product name must be at least 3 characters in length.')
     .trim()
@@ -80,6 +81,9 @@ exports.create_product = [
     body('price', "Price must be between $0 and $9999")
     .isFloat({ force_decimal: true, min: 0, max: 9999 }),
 
+    body('inventory', "Inventory must be between 0 and 1000")
+    .isInt({ min: 0, max: 1000}),
+
 
     // Process request after data validation.
     (req, res, next) => {
@@ -92,12 +96,12 @@ exports.create_product = [
             description : req.body.description,
             category: req.body.category,
             price: req.body.price,
-            inventory: req.body.count
+            inventory: req.body.inventory
         });
 
         // If errors are present, re-render 'add_product' as done in add_products function above.
         if (!errors.isEmpty()) {
-            console.log(req.body);
+
             async.parallel(
                 {
                     category : function(callback) {
@@ -106,14 +110,16 @@ exports.create_product = [
                         .exec(callback);
                     },
                     categories_list: function(callback) {
-                        Category.find().exec(callback);f
+                        Category.find().exec(callback);
                     },
                 },
         
                 function (err, result) {
                     if (err) { next(err); }
+                    console.log(req.body);
                     
                     res.render("add_product", {
+                        update_bool : false,
                         title: "Add product to " + result.category.name + " category, or choose a difference category below:",
                         url: result.category.url,
                         category_name : result.category.name,
@@ -184,7 +190,6 @@ exports.update_product_get = function(req, res, next) {
         },
 
         function (err, result) {
-            console.log(result);
             if (err) { next(err); }
             
             if (result == null) {
@@ -194,10 +199,13 @@ exports.update_product_get = function(req, res, next) {
             }
 
             res.render("add_product", {
+                update_bool : true,
                 title: "Update Product Information: " + result.product.name,
                 url: result.product.category.url,
+                product : result.product,
+                categories_list : result.categories_list,
                 category_name : result.product.category.name,
-                categories_list : result.categories_list
+                persistant_data : result.product
             });
         }
     )
@@ -205,34 +213,92 @@ exports.update_product_get = function(req, res, next) {
 
 // Handle product update on POST from update_product view.
 exports.update_product_post = [
-    body('name').trim().isLength({ min: 1}).escape().withMessage("Category name is required.")
-    .isAlphanumeric('en-US', {ignore: " "}).withMessage('Category name has non-alphanumeric characters.'),
 
-    body('description').trim().isLength({ min: 1 }).escape().withMessage('Category description must be specified.')
-    .isAlphanumeric('en-US', {ignore: " "}).withMessage('Category description has non-alphanumeric characters.'),
+    body('name', 'Product name must be at least 3 characters in length.')
+    .trim()
+    .isLength({ min: 3})
+    .escape(),
+
+    body('description', 'There must be a description')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+
+    body('price', "Price must be between $0 and $9999")
+    .isFloat({ force_decimal: true, min: 0, max: 9999 }),
+
+    body('inventory', "Inventory must be between 0 and 1000")
+    .isInt({ min: 0, max: 1000}),
 
     (req, res, next) => {
 
+        console.log(req.body.category);
+        // Extract all validation errors for display.
+        const errors = validationResult(req);
 
-        Product.findByIdAndUpdate(
-            req.params.id, 
+        // If errors are present, re-render 'add_product' with errors.
+        if (!errors.isEmpty()) {
 
-            {
-            "name": req.body.name,
-            "description": req.body.description,
-            "price" : req.body.price,
-            "inventory": req.body.inventory
-            },
-            
-            function(err, result) {
-                if (err) {
-                    console.log("Error: " + err);
-                } else {
-                    console.log("Document updated.");
-                }
-            })
+            async.parallel(
+                {
+                    category : function(callback) {
+                        Category.findById(req.body.category)
+                        .populate("name")
+                        .exec(callback);
+                    },
 
-        res.redirect("/");
+                    product: function(callback) {
+                        Product.findById(req.params.id)
+                        .populate('category')
+                        .exec(callback);
+                    },
+                    categories_list: function(callback) {
+                        Category.find().exec(callback);
+                    },
+                },
+        
+                function (err, result) {
+                    if (err) { next(err); }
+                    console.log("HERE: " + result.category.name);
+                    console.log(result.category.url);
+                    console.log(result.categories_list);
+                    
+                    res.render("add_product", {
+                        update_bool : true,
+                        title: "Update Product Information: " + result.product.name,
+                        url: result.category.url,
+                        product: result.product,
+                        category_name : result.category.name,
+                        categories_list : result.categories_list,
+                        persistant_data : req.body,
+                        errors : errors.array()
+                    });
+                })
+            return;
+        } 
+
+        else {
+            Product.findByIdAndUpdate(
+                req.params.id, 
+
+                {
+                "name": req.body.name,
+                "description": req.body.description,
+                "category" : req.body.category,
+                "price" : req.body.price,
+                "inventory": req.body.inventory
+                },
+                
+                function(err, result) {
+
+                    if (err) {
+                        console.log("Error: " + err);
+                    } else {
+                        console.log("Document updated.");
+                        res.redirect(result.url);
+                    }
+                });
+            }
     }
 
 ]
