@@ -36,14 +36,12 @@ exports.category_products = function(req, res, next) {
         },
 
         category_products: function(callback) {
-            console.log(req.params.id);
             Product.find({ 'category' : req.params.id }, 'name description price inventory')
             .exec(callback);
         }
 
     }, function(err, results) {
 
-        console.log(results.category);
         if (err) { return next(err); }
 
         if (results.category == null) {
@@ -110,6 +108,56 @@ exports.add_category_post = [
 
 
 // Display category deletion page on GET.
-exports.delete_category = function(req, res, next) {
-    res.render('delete_product');
+exports.delete_category_get = function(req, res, next) {
+
+    async.parallel({
+        category : function(callback) {
+            Category.findById(req.params.id)
+            .exec(callback);
+        },
+
+        products : function(callback) {
+            Product.find({ 'category' : req.params.id }, 'name')
+            .exec(callback);
+        
+        }
+    },  function(err, result) {
+
+        console.log(result.category.name);
+        if (err) { return next(err); }
+
+        if (result.category == null) {
+            let err = new Error("Category not found");
+            err.status = 404;
+            return next(err);
+        }
+
+        console.log(result.products);
+        res.render('delete_category', {
+            category_name : result.category.name,
+            return_url : "/category/" + result.category._id,
+            category_products : result.products
+        })
+
+    })
+}
+
+// Handle category deletion on POST from form.
+exports.delete_category_post = function(req, res, next) {
+    async.parallel({
+        products : function(callback) {
+            Product.deleteMany({ 'category' : req.params.id })
+            .exec(callback);
+        },
+
+        category : function(callback) {
+            Category.deleteOne({ '_id' : req.params.id})
+            .exec(callback);
+        }
+    }, function(err, results) {
+        console.log(results);
+
+        if (err) { return next(err); }
+        res.redirect("/");
+    })
 }

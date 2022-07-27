@@ -1,0 +1,38 @@
+extends layout 
+ 
+block content 
+
+    br
+    a(href="/") Return Home
+    br
+    a(href=return_url) Return to #{category_name} Page.
+
+    h1 Delete Category: #{category_name}.
+
+
+    if (category_products.length > 0)
+
+        p Press the delete button below to delete the #{category_name} Category and all associated products.
+        table(class="products-table" style='width:80%')
+                tr(class="products-table-fields")
+
+                    th Product Name
+                    th Product Link
+                
+                each product in category_products
+
+                    tr
+                        td=product.name
+
+                        td 
+                            a(href= product.url) View Product
+
+    else 
+        p This category contains no products. Click the button below to delete it.
+
+    br 
+    br
+    br
+
+    form(action="", method="post") 
+        button(type="submit" class="submit-btn") Delete Category

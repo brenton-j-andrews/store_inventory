@@ -18,10 +18,14 @@ router.get("/add_category", categories_controller.add_category_get);
 router.post("/add_category", categories_controller.add_category_post);
 
 // GET request for deleting a category.
-router.get("/delete_category", categories_controller.delete_category);
+router.get("/:id/delete_category", categories_controller.delete_category_get);
+
+// POST request for deleting a category.
+router.post("/:id/delete_category", categories_controller.delete_category_post);
 
 // GET request for all products of selected category.
 router.get("/:id", categories_controller.category_products);
+
 
 
 module.exports = router;
