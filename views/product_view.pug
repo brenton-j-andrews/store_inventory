@@ -2,10 +2,9 @@ extends layout
  
 block content 
 
-    br
-    a(href="/") Return Home
-    br
-    a(href=product_info.category.url) Return to #{product_info.category.name} Page.
+    div.return-link-wrapper
+        a(href="/" class="return-link") Return Home
+        a(href=product_info.category.url class="return-link") Return to #{product_info.category.name} Page.
 
     div(class="categories-nav")
         h1=title

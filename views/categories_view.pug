@@ -11,11 +11,19 @@ block content
                 span(class="tooltiptext") Add a new category.
             
 
-    ul
-        each category in list_categories
-            dt
-                a(href=category.url) #{category.name}
-                p=category.description
+    div.content-wrapper
 
-        else 
-            p there are no categories.
+        ul.category-wrapper
+
+            each category in list_categories
+
+                dt.category-unit
+                    div.category-unit-left
+                        h4 Category: #{category.name}
+                        p Description: #{category.description}
+
+                    div.category-unit-right 
+                        a(href=category.url class="view-link") View Category
+
+            else 
+                p there are no categories.

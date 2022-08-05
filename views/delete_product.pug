@@ -1,8 +1,9 @@
 extends layout 
  
 block content 
-    a(href="/") Return Home
-    a(href="/product/" + url ) Return to product page.
+    div.return-link-wrapper
+        a(href="/" class="return-link") Return Home
+        a(href="/product/" + url class="return-link") Return to product page.
 
     h1= title 
     

@@ -2,37 +2,37 @@ extends layout
  
 block content 
 
-    a(href="/") Return Home
+    a(href="/" class="return-link") Return Home
 
     if update_bool 
-        a(href=`/product/${product._id}`) Return to product page.
+        a(href=`/product/${product._id}` class="return-link") Return to product page.
 
     else 
-        a(href=url) Return to #{category_name} page.
+        a(href=url class="return-link") Return to #{category_name} page.
 
 
     h1=title
 
-
-    form(method='POST' action='')
+    form(method='POST' action='' class="form-default")
         div.form-group
-            label(for='name') Product Name:
-                input#name.form-control(type='text', name='name' value=persistant_data ? persistant_data.name : '')
+            label(for='name' class="form-label") Product Name:
+            input#name.form-control(type='text', name='name' value=persistant_data ? persistant_data.name : '')
             
         div.form-group
-            label(for='description') Product Description: 
-                input#description.form-control(type='textarea', name='description' value=persistant_data ? persistant_data.description : '')
+            label(for='description' class="form-label") Product Description: 
+            input#description.form-control(type='textarea', name='description' value=persistant_data ? persistant_data.description : '')
 
         div.form-group
-            label(for='price') Product Price: 
-                input#price.form-control(type='float', name='price' value=persistant_data ? persistant_data.price : '')
+            label(for='price' class="form-label") Product Price: 
+            input#price.form-control(type='float', name='price' value=persistant_data ? persistant_data.price : '')
 
         div.form-group
-            label(for='inventory') Product Count: 
-                input#inventory.form-control(type='number', name='inventory' value=persistant_data ? persistant_data.inventory : '')
+            label(for='inventory' class="form-label") Product Count: 
+            input#inventory.form-control(type='number', name='inventory' value=persistant_data ? persistant_data.inventory : '')
+
 
         div.form-group
-            label(for='category') Choose a category.
+            label(for='category' class="form-label") Choose a category.
             select(id='category' name='category')
                 for item in categories_list 
                     if item.name == category_name

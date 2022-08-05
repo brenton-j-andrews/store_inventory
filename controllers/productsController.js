@@ -259,10 +259,7 @@ exports.update_product_post = [
         
                 function (err, result) {
                     if (err) { next(err); }
-                    console.log("HERE: " + result.category.name);
-                    console.log(result.category.url);
-                    console.log(result.categories_list);
-                    
+                
                     res.render("add_product", {
                         update_bool : true,
                         title: "Update Product Information: " + result.product.name,

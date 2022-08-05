@@ -1,24 +1,28 @@
 extends layout 
  
 block content 
-    a(href="/") Return Home
 
-    if(update_bool) 
-        a(href="/") Retunr to category page.
+    div.return-link-wrapper
+        a(href="/" class="return-link") Return Home
+
+        if(update_bool) 
+            a(href="/" class="return-link") Return to category page.
 
     h1 Create a new category!
 
-    form(method='POST' action='')
+    form(method='POST' action='' class="form-default")
+
         div.form-group
-            label(for='name') Category Name:
-                input#name.form-control(type='text', name='name' value=persistant_data ? persistant_data.name : '')
+            label(for='name' class="form-label") Category Name:
+            input#name.form-control(type='text', name='name' value=persistant_data ? persistant_data.name : '')
             
         div.form-group
-            label(for='description') Category Description: 
-                input#description.form-control(type='textarea', name='description' value=persistant_data ? persistant_data.description : '')
-            
+            label(for='description' class="form-label") Category Description: 
+            textarea#description(name="description", cols="30", rows="10" value='') 
+        
         div.form-group
-            button.btn.btn-primary(type='submit') Submit
+            button(type='submit' class="form-button") Submit
+
 
     if errors 
         ul 

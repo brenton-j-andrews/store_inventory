@@ -1,22 +1,32 @@
-/* Import fonts / declare constants */
+/* Search || to jump to different sections of the stylesheet. */
+
+/* ||--------------  Imports, fonts, custom variables ------------  */
+
+@import url("reset.css");
+
 @font-face {
   font-family: headerFont;
   src: url("../fonts/Teko-Regular.ttf");
 }
 
+:root {
+  --primary-dark-teal: #629593;
+  --primary-light-teal: #aac3c3;
+  --primary-blue: #97cbcf;
+  --primary-grey: #8f9a9f;
+  --primary-white: #fbfbfb;
+}
 
-/* Page styling */
+/* || ------------------------- Page Styling ------------------------- */
+
 html, body {
+  width: 100%;
   height: 100%;
 }
 
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: yellow;
-}
-
-a {
-  color: #00B7FF;
+  background-color: var(--primary-dark-teal);
 }
 
 .page-wrapper {
@@ -24,9 +34,10 @@ a {
   flex-direction: column;
   align-items: center;
   height: 100%;
+  padding: 25px 0px 25px 0px;
 }
 
-/* Header Styling */
+/* || ------------------------ Header Styling ------------------------ */
 
 .page-header {
   font-family: headerFont;
@@ -44,7 +55,7 @@ a {
 
 .categories-nav {
   width: 90%;
-  background-color: orange;
+  background-color: var(--primary-blue);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -64,7 +75,7 @@ a {
   height: 50px;
 }
 
-/* Button hover and tooltip styling. */
+/* ||  -------- Button hover, tooltip, nav-links styling.  -------- */
 
 .tooltiptext {
   visibility: hidden;
@@ -92,11 +103,131 @@ a {
   opacity: 1;
 } 
 
+.return-link-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.return-link {
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  color: whitesmoke;
+  background-color: grey;
+  padding: 10px;
+  margin: 5px;
+}
+
+.return-link:hover {
+  background-color: darkgray;
+}
+
+
+/*  ------------------------ Content styling ------------------------ */
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+  width: 90%;
+}
+
+.category-wrapper {
+  width: 100%;
+}
+
+.category-unit {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary-grey);
+  margin-bottom: 25px;
+  padding: 5px;
+}
+
+.category-unit-left {
+  margin-left: 25px;
+}
+
+.category-unit-right {
+  margin-right: 25px;
+}
+
+.view-link {
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  color: black;
+  background-color: var(--primary-blue);
+  padding: 10px;
+  margin: 5px;
+}
+
+.view-link:hover {
+  background-color: var(--primary-dark-teal);
+  color: white;
+}
+
+/*  ------------------------ Form styling  ------------------------ */
+.form-default {
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+
+  padding: 25px;
+  margin-top: 25px;
+  border-radius: 25px;
+
+  color: white;
+  background-color: var(--primary-grey);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  margin: 10px;
+
+}
+
+.form-label {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.form-button {
+  width: 25%;
+  padding: 5px;
+}
 
 
 
 
-/* Stuff... */
+/* .category-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #D6D3D3; 
+  padding: 10px;
+}
+
+.form-group {
+  text-align: center; 
+  background-color: orange;
+  margin: 5px;
+  padding: 5px;
+}
+
+.form-textarea {
+  width: 90%;
+  min-height: 100px;
+}
+
+
+
+
 
 .products-table {
   text-align: center;
@@ -104,9 +235,9 @@ a {
 
 .products-table th {
   color: red;
-}
+} */
 
-/* Footer styling */
+/*  ------------------------ Footer styling  ------------------------ */
 
 .page-footer {
   display: flex;
@@ -115,6 +246,6 @@ a {
 
   bottom: 0;
   width: 90%;
-  background-color: orange;
+  background-color: var(--primary-blue);
   flex-shrink: 0;
 }

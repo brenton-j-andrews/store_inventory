@@ -2,17 +2,16 @@ extends layout
  
 block content 
 
-    br
-    a(href="/") Return Home
-    br
-    a(href=return_url) Return to #{category_name} Page.
+    div.return-link-wrapper
+        a(href="/" class="return-link") Return Home
+        a(href=return_url class="return-link") Return to #{category_name} Page.
 
     h1 Delete Category: #{category_name}.
 
-
     if (category_products.length > 0)
 
-        p Press the delete button below to delete the #{category_name} Category and all associated products.
+        h2 Press the delete button below to delete the #{category_name} Category and all associated products.
+        
         table(class="products-table" style='width:80%')
                 tr(class="products-table-fields")
 

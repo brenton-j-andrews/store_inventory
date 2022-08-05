@@ -77,7 +77,7 @@ exports.add_category_post = [
     (req, res, next) => {
 
         let persistant_data = req.body;
-        console.log(persistant_data);
+
         // Extract all validation errors for display.
         const errors = validationResult(req);
 
@@ -118,7 +118,6 @@ exports.delete_category_get = function(req, res, next) {
 
     },  function(err, result) {
 
-        console.log(result.category.name);
         if (err) { return next(err); }
 
         if (result.category == null) {
@@ -127,7 +126,6 @@ exports.delete_category_get = function(req, res, next) {
             return next(err);
         }
 
-        console.log(result.products);
         res.render('delete_category', {
             category_name : result.category.name,
             return_url : "/category/" + result.category._id,
@@ -150,7 +148,6 @@ exports.delete_category_post = function(req, res, next) {
             .exec(callback);
         }
     }, function(err, results) {
-        console.log(results);
 
         if (err) { return next(err); }
         res.redirect("/");
@@ -199,7 +196,7 @@ exports.update_category_post = [
         },
         
         function(err, results) {
-            console.log(results);
+
             if (err) { next(err); }
 
             // If there are errors present, re-render update_category with errors listed and persistant data.
@@ -215,7 +212,7 @@ exports.update_category_post = [
 
             // If no errors, update the category and associated products!
             else {
-                console.log(req.body.name);
+
                 Category.findByIdAndUpdate(req.params.id, 
                     {
                         'name' : req.body.name,
@@ -223,9 +220,7 @@ exports.update_category_post = [
                     },
 
                     function(err, result) {
-                        console.log("Document updated.");
                         res.redirect(result.url);
-                        
                     }
                 );
             };
