@@ -9,7 +9,7 @@ View the project live [here](https://intense-crag-59359.herokuapp.com/home).
 Completed for [The Odin Project](https://www.theodinproject.com/lessons/nodejs-inventory-application) Node / Express Course.
 
 This simple web application is an 'inventory tracker' that allows you to Create / Read / Update and Delete 
-different categories and products contained therein. Any user can create a new category or product, but a password must be entered to perform any deletions.
+different categories and products contained therein. Any user can create a new category or product, but a password must be entered to perform any deletions and updates.
 
 The application styling is pretty boring, but I spent my daily creativity allowance over at my [Midieval Themed Message Board](https://github.com/brenton-j-andrews/message_board), so what can you do.
 
