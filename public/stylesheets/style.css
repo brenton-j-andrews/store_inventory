@@ -189,7 +189,6 @@ body {
   flex-direction: column;
   color: white;
   margin: 10px;
-
 }
 
 .form-label {
@@ -202,40 +201,44 @@ body {
   padding: 5px;
 }
 
+.delete_form {
+  margin-top: 25px;
+}
 
-
-
-/* .category-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #D6D3D3; 
+.delete-button {
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  color: whitesmoke;
+  background-color: grey;
   padding: 10px;
-}
-
-.form-group {
-  text-align: center; 
-  background-color: orange;
   margin: 5px;
-  padding: 5px;
+  border-style: none;
 }
 
-.form-textarea {
-  width: 90%;
-  min-height: 100px;
+.delete-button:hover {
+  background-color: darkgray;
 }
 
-
-
-
+/* || Table styling */
 
 .products-table {
+  margin-top: 25px;
   text-align: center;
+  border-collapse: collapse;
+}
+
+.products-table td,
+.products-table th {
+  border: 1px solid white;
+  padding: 8px;
 }
 
 .products-table th {
-  color: red;
-} */
+  padding: 20px 0px 12px 0px;
+  background-color: var(--primary-blue);
+  border: 5px sold #ddd;
+}
 
 /*  ------------------------ Footer styling  ------------------------ */
 
