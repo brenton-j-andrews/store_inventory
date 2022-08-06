@@ -1,5 +1,6 @@
 let async = require('async');
 let mongoose = require('mongoose');
+let dotenv = require('dotenv');
 
 const { body, validationResult } = require('express-validator');
 
@@ -51,7 +52,8 @@ exports.category_products = function(req, res, next) {
         res.render('category_products', {
             title : results.category.name + " products:",
             description: results.category.description, 
-            id: req.params.id, products: results.category_products
+            id: req.params.id, 
+            products: results.category_products
         })
     });
 }
@@ -120,16 +122,11 @@ exports.delete_category_get = function(req, res, next) {
 
         if (err) { return next(err); }
 
-        if (result.category == null) {
-            let err = new Error("Category not found");
-            err.status = 404;
-            return next(err);
-        }
-
         res.render('delete_category', {
             category_name : result.category.name,
             return_url : "/category/" + result.category._id,
-            category_products : result.products
+            category_products : result.products,
+            error_message : null
         })
 
     })
@@ -137,21 +134,55 @@ exports.delete_category_get = function(req, res, next) {
 
 // Handle category deletion on POST from form.
 exports.delete_category_post = function(req, res, next) {
-    async.parallel({
-        products : function(callback) {
-            Product.deleteMany({ 'category' : req.params.id })
-            .exec(callback);
-        },
 
-        category : function(callback) {
-            Category.deleteOne({ '_id' : req.params.id})
-            .exec(callback);
-        }
-    }, function(err, results) {
+    // Check authentication.
+    if (req.body.password === process.env.AUTH_KEY) {
+        async.parallel({
+            products : function(callback) {
+                Product.deleteMany({ 'category' : req.params.id })
+                .exec(callback);
+            },
+    
+            category : function(callback) {
+                Category.deleteOne({ '_id' : req.params.id})
+                .exec(callback);
+            }
+        }, function(err, results) {
+            if (err) { 
+                return next(err); 
+            }
 
-        if (err) { return next(err); }
-        res.redirect("/");
-    })
+            res.redirect("/");
+        });
+    }
+
+    // If authentication fails, re-render page as in delete_category_get.
+    else {
+        async.parallel({
+            category : function(callback) {
+                Category.findById(req.params.id)
+                .exec(callback);
+            },
+    
+            products : function(callback) {
+                Product.find({ 'category' : req.params.id }, 'name')
+                .exec(callback);
+            }
+    
+        },  function(err, result) {
+    
+            if (err) { return next(err); }
+    
+            res.render('delete_category', {
+                category_name : result.category.name,
+                return_url : "/category/" + result.category._id,
+                category_products : result.products,
+                error_message : "Incorrect password"
+            })
+    
+        })
+    }
+   
 }
 
 // Display category update / edit form on GET.
@@ -184,9 +215,13 @@ exports.update_category_post = [
     .isLength({ min: 1 })
     .escape(),
 
+    body('password', 'Incorrect password.')
+    .equals(process.env.AUTH_KEY),
+
     (req, res, next) => {
 
         const errors = validationResult(req);
+        console.log(errors);
 
         async.parallel({
             category : function(callback) {
@@ -197,14 +232,15 @@ exports.update_category_post = [
         
         function(err, results) {
 
+            console.log(results);
             if (err) { next(err); }
 
             // If there are errors present, re-render update_category with errors listed and persistant data.
             if(!errors.isEmpty()) {
                 res.render('update_category', {
-                    category_name : results.name,
+                    category_name : results.category.name,
                     category_description : results.description,
-                    return_url : results.url,
+                    return_url : results.category.url,
                     persistant_data : req.body,
                     errors : errors.array()
                 })

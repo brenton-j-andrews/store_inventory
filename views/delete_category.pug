@@ -30,5 +30,13 @@ block content
         p This category contains no products. Click the button below to delete it.
 
 
-    form(action="", method="post" class="delete_form") 
+    form(action="", method="post" class="form-default") 
+
+        div.form-group
+                label(for='password' class="form-label") Enter password:
+                input#password.form-control(type='password', name='password' value='')
+
         button(type="submit" class="delete-button") Delete Category
+
+    if (error_message)
+        p=error_message
