@@ -25,20 +25,25 @@ block content
                 span(class="tooltiptext") Delete this category.
 
 
-    table(class="products-table" style='width:80%')
-        tr(class="products-table-fields")
+    if (products.length > 0)
 
-            th Product Name
-            th Product Stock 
-            th Unit Price (USD)
-            th Product Link
-        
-        each product in products
+        table(class="products-table" style='width:80%')
+            tr(class="products-table-fields")
 
-            tr
-                td=product.name
-                td=product.inventory
-                td="$" + product.price 
+                th Product Name
+                th Product Stock 
+                th Unit Price (USD)
+                th Product Link
+            
+            each product in products
 
-                td 
-                    a(href= product.url) View Product
+                tr
+                    td=product.name
+                    td=product.inventory
+                    td="$" + product.price 
+
+                    td 
+                        a(href= product.url) View Product
+    
+    else
+        h2 This category currently has no products.
