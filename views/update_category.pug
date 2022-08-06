@@ -16,11 +16,7 @@ block content
         div.form-group
             label(for='description' class="form-label") Category Description:         
             textarea#description(name="description", cols="30", rows="10" value='')= persistant_data ? persistant_data.description : category_description
-
-        div.form-group
-            label(for='password' class="form-label") Enter password:
-            input#password.form-control(type='password', name='password' value='')
-
+            
         div.form-group
             button(type='submit') Submit 
 
