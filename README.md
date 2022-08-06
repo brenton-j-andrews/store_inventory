@@ -1,6 +1,8 @@
 # Inventory Tracker 
 
-View the project live [here]("www.google.com")
+![Demo_image](public/images/readme_image.png)
+
+View the project live [here](https://intense-crag-59359.herokuapp.com/home).
 
 #### About this project.
 
@@ -24,3 +26,5 @@ This project was my first taste of backend programming outside of following tuto
 I gained some familiarity with various Express features and modules, learned how to use environmental variables with Node,
 performed CRUD operations on a NOSQL database, 
 and applied what I learned about the model-view-controller design pattern. 
+
+My biggest takeaway was accidentally using git rebase and deleting some work that I had done. Definitely learn a bit about proper git usage when that happens, so maybe it was a good thing after all!
