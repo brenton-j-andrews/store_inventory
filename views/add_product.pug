@@ -30,7 +30,6 @@ block content
             label(for='inventory' class="form-label") Product Count: 
             input#inventory.form-control(type='number', name='inventory' value=persistant_data ? persistant_data.inventory : '')
 
-
         div.form-group
             label(for='category' class="form-label") Choose a category.
             select(id='category' name='category')
@@ -39,6 +38,11 @@ block content
                         option(value=item._id selected=true)=item.name 
                     else 
                         option(value=item._id)=item.name
+
+        if (persistant_data)
+            div.form-group
+                label(for='password' class="form-label") Enter password:
+                input#password.form-control(type='password', name='password' value='')
             
         div.form-group
             button.btn.btn-primary(type='submit') Submit

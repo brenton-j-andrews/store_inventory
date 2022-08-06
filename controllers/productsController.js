@@ -148,28 +148,40 @@ exports.delete_product_get = function(req, res, next) {
     .exec(function (err, result) {
         if (err) { next(err); }
 
-        if (result == null) {
-            let err = new Error("Product not found, check database.");
-            err.statusCode = 404;
-            return next(err);
-        }
-
-   
         res.render("delete_product", {
             title: "Delete Product: " + result.name,
-            url: req.params.id
+            url: req.params.id,
+            error_message: null
         });
     })
 }
 
 // Handle product deletion on POST from delete_product view.
 exports.delete_product_post = function(req, res, next) {
+    
+    if (req.body.password === process.env.AUTH_KEY) {
+        Product.deleteOne( { _id: req.params.id }, 
+            function(err, res) {
+                if (err) return err;    
+            });
+            res.redirect("/");
+    }
 
-    Product.deleteOne( { _id: req.params.id }, 
-    function(err, res) {
-        if (err) return err;    
-    });
-    res.redirect("/");
+    else {
+        Product.findById(req.params.id)
+        .populate("category")
+        .exec(function (err, result) {
+            if (err) { 
+                next(err); 
+            }
+
+            res.render("delete_product", {
+                title: "Delete Product: " + result.name,
+                url: req.params.id,
+                error_message: "Incorrect password"
+            });
+    })
+    }
 }
 
 // Display product update form on GET.
@@ -230,9 +242,11 @@ exports.update_product_post = [
     body('inventory', "Inventory must be between 0 and 1000")
     .isInt({ min: 0, max: 1000}),
 
+    body('password', 'Incorrect password.')
+    .equals(process.env.AUTH_KEY),
+
     (req, res, next) => {
 
-        console.log(req.body.category);
         // Extract all validation errors for display.
         const errors = validationResult(req);
 
